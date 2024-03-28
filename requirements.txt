@@ -6,3 +6,4 @@ unstructured
 openai
 chromadb
 tiktoken
+langchain-openai
