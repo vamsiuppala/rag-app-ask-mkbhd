@@ -13,6 +13,7 @@ from langchain.vectorstores import Chroma, Pinecone
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.memory import ConversationBufferMemory
 from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
+from langchain_openai.chat_models import ChatOpenAI
 
 import streamlit as st
 
@@ -25,7 +26,7 @@ st.title("Retrieval Augmented Generation Engine")
 
 
 def load_documents():
-    loader = DirectoryLoader(TMP_DIR.as_posix(), glob='**/*.pdf')
+    loader = DirectoryLoader(TMP_DIR.as_posix(), glob='**/*.txt')
     documents = loader.load()
     return documents
 
@@ -42,15 +43,21 @@ def embeddings_on_local_vectordb(texts):
     return retriever
 
 def embeddings_on_pinecone(texts):
-    pinecone.init(api_key=st.session_state.pinecone_api_key, environment=st.session_state.pinecone_env)
+    # pinecone.init(api_key=st.session_state.pinecone_api_key, environment=st.session_state.pinecone_env)
+    pc = Pinecone(
+        api_key=st.session_state.pinecone_api_key,
+        environment=st.session_state.pinecone_env
+    )
     embeddings = OpenAIEmbeddings(openai_api_key=st.session_state.openai_api_key)
-    vectordb = Pinecone.from_documents(texts, embeddings, index_name=st.session_state.pinecone_index)
+    # vectordb = Pinecone.from_documents(texts, embeddings, index_name=st.session_state.pinecone_index)
+    vectordb = pc.from_documents(texts, embeddings, index_name=st.session_state.pinecone_index)
     retriever = vectordb.as_retriever()
     return retriever
 
 def query_llm(retriever, query):
     qa_chain = ConversationalRetrievalChain.from_llm(
-        llm=OpenAIChat(openai_api_key=st.session_state.openai_api_key),
+        # llm=OpenAIChat(openai_api_key=st.session_state.openai_api_key),
+        llm=ChatOpenAI(model="gpt-3.5-turbo", openai_api_key=st.session_state.openai_api_key),
         retriever=retriever,
         return_source_documents=True,
     )
@@ -85,7 +92,7 @@ def input_fields():
     #
     st.session_state.pinecone_db = st.toggle('Use Pinecone Vector DB')
     #
-    st.session_state.source_docs = st.file_uploader(label="Upload Documents", type="pdf", accept_multiple_files=True)
+    st.session_state.source_docs = st.file_uploader(label="Upload Documents", type="txt", accept_multiple_files=True)
     #
 
 
@@ -96,7 +103,7 @@ def process_documents():
         try:
             for source_doc in st.session_state.source_docs:
                 #
-                with tempfile.NamedTemporaryFile(delete=False, dir=TMP_DIR.as_posix(), suffix='.pdf') as tmp_file:
+                with tempfile.NamedTemporaryFile(delete=False, dir=TMP_DIR.as_posix(), suffix='.txt') as tmp_file:
                     tmp_file.write(source_doc.read())
                 #
                 documents = load_documents()
