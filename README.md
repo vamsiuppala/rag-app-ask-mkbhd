@@ -2,8 +2,6 @@
 
 [Access application on Streamlit Cloud Platform](https://retrieval-augmented-generation.streamlit.app/)
 
-![Demo](data/demo.gif)
-
 ## Overview
 
 The Retrieval Augmented Engine (RAG) is a powerful tool for document retrieval, summarization, and interactive question-answering. This project utilizes LangChain, Streamlit, and Pinecone to provide a seamless web application for users to perform these tasks. With RAG, you can easily upload multiple PDF documents, generate vector embeddings for text within these documents, and perform conversational interactions with the documents. The chat history is also remembered for a more interactive experience.
@@ -47,14 +45,14 @@ Before running the project, make sure you have the following prerequisites:
 
 3. Run the Streamlit app:
    ```bash
-   streamlit run src/rag_engine.py
+   streamlit run rag_engine.py
    ```
 
 4. Access the app by opening a web browser and navigating to the provided URL.
 
 5. Input your OpenAI API key, Pinecone API key, Pinecone environment, and Pinecone index name in the respective fields. You can provide them either in the sidebar of the application or place them in the **secrets.toml** file in the [.streamlit directory](src/.streamlit)
 
-6. Upload the PDF documents you want to analyze.
+6. Upload the txt documents you want to analyze.
 
 7. Click the "Submit Documents" button to process the documents and generate vector embeddings.
 
@@ -62,13 +60,14 @@ Before running the project, make sure you have the following prerequisites:
 
 ## Contributors
 
-[Mir Abdullah Yaser](https://github.com/mirabdullahyaser)
+Forked from: [Mir Abdullah Yaser](https://github.com/mirabdullahyaser)
+Modified by: [Vamsi Uppala](https://github.com/vamsiuppala)
 
 ## Contact
 
 If you have any questions, suggestions, or would like to discuss this project further, feel free to get in touch with me:
 
-- [Email](mailto:mirabdullahyaser@gmail.com)
-- [LinkedIn](https://www.linkedin.com/in/mir-abdullah-yaser/)
+- [Email](mailto:uvvamsikrishna@gmail.com@gmail.com)
+- [LinkedIn](https://www.linkedin.com/in/vamsiuppala/)
 
 I'm open to collaboration and would be happy to connect!
